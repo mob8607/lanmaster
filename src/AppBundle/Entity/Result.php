@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Result
  *
  * @ORM\Table("results")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ResultRepository")
  */
 class Result
 {
@@ -57,7 +57,7 @@ class Result
     }
 
     /**
-     * @return mixed
+     * @return Player
      */
     public function getPlayer()
     {
@@ -65,7 +65,7 @@ class Result
     }
 
     /**
-     * @param mixed $player
+     * @param Player $player
      */
     public function setPlayer($player)
     {

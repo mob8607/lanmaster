@@ -1,0 +1,36 @@
+{% extends '@App/base.html.twig' %}
+
+{% block headerTitle %}
+    Event hinzufügen
+{% endblock %}
+
+{% block navigation %}
+<ul id="nav-mobile" class="right hide-on-med-and-down">
+    <li><a href="{{ path('homepage') }}">Startseite</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div>
+            <p>
+                {{ message }}
+            </p>
+        </div>
+
+        <form method="post">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="event-name">Name</label>
+                    <input id="event-name" type="text" class="validate" name="name"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Absenden
+                    </button>
+                </div>
+            </div>
+        </form>
+        <a href="{{ path('homepage') }}">Zurück</a>
+    </div>
+{% endblock %}

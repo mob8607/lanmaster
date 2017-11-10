@@ -1,0 +1,30 @@
+{% extends '@App/base.html.twig' %}
+
+{% block headerTitle %}
+    Resultat hinzufügen
+{% endblock %}
+
+{% block navigation %}
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{{ path('homepage') }}">Startseite</a></li>
+    </ul>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                <ul>
+                    {% for game in games %}
+                        <li>
+                            <a href="{{ path('add-result', {
+                                'eventId': eventId,
+                                'gameId': game.id
+                            }) }}">{{ game.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <a href="{{ path('event', {'eventId': eventId}) }}">Zurück</a>
+    </div>
+{% endblock %}

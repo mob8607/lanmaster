@@ -1,18 +1,45 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-            <link type="text/css" rel="stylesheet" href="bundles/app/dist/materialize.min.css"  media="screen,projection"/>
-        {% block stylesheets %}
-        {% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-            <script src="{{ asset('bundles/app/dist/jquery.min.js') }}"></script>
-            <script src="{{ asset('bundles/app/dist/materialize.min.js') }}"></script>
-        {% block javascripts %}
-        {% endblock %}
-    </body>
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/bundles/app/dist/normalize.css" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="/bundles/app/dist/materialize.min.css" media="screen,projection"/>
+    {% block stylesheets %}
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+</head>
+<body>
+<header>
+    <nav class="top-nav">
+        <div class="nav-wrapper">
+            <div class="row">
+                <div class="col s12">
+                    <span class="brand-logo left">{% block headerTitle %}{% endblock %}</span>
+                    {% block navigation %}
+                        <ul id="nav-mobile" class="right hide-on-med-and-down">
+                            <li><a href="{{ path('homepage') }}">Startseite</a></li>
+                            <li><a href="{{ path('add-event') }}">Event hinzufügen</a></li>
+                            <li><a href="{{ path('add-game') }}">Spiel hinzufügen</a></li>
+                            <li><a href="{{ path('add-player') }}">Spieler hinzufügen</a></li>
+                        </ul>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
+{% block body %}{% endblock %}
+<script src="{{ asset('bundles/app/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/app/dist/materialize.min.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+</script>
+{% block javascripts %}
+{% endblock %}
+</body>
 </html>

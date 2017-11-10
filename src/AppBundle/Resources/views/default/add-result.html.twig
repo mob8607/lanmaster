@@ -1,34 +1,44 @@
 {% extends '@App/base.html.twig' %}
 
+{% block headerTitle %}
+    Resultat hinzufügen
+{% endblock %}
+
+{% block navigation %}
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{{ path('homepage') }}">Startseite</a></li>
+    </ul>
+{% endblock %}
 {% block body %}
-    <div id="wrapper">
-        <div id="container">
-            <div id="welcome">
-                <h1><span>Welcomed to</span> Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</h1>
-            </div>
+    <div class="container">
+        <div>
+            <p>
+                {{ message }}
+            </p>
         </div>
-    </div>
 
-    <div>
-        <table class="striped">
-            <thead>
-            <tr>
-                <th>Gesamtrang</th>
-                <th>Nickname</th>
-                <th>Spiel 1</th>
-                <th>Spiel 2</th>
-                <th>Spiel 3</th>
-                <th>Spiel 4</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr>
-                <td>Jonathan</td>
-                <td>Lollipop</td>
-                <td>$7.00</td>
-            </tr>
-            </tbody>
-        </table>
+        <form method="post">
+            <div class="row">
+                <div class="input-field col s6">
+                    <select id="player" class="validate" name="player">
+                        <option value="" disabled selected>Wähle eine option</option>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.nickname }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="player">Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <label for="game-name">Rang</label>
+                    <input id="game-name" type="number" name="rank"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Absenden</button>
+                </div>
+            </div>
+        </form>
+        <a href="{{ path('select-game', {'eventId': eventId}) }}">Zurück</a>
     </div>
 {% endblock %}

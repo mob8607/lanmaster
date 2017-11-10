@@ -77,4 +77,27 @@ class Player
         return $this->nickname;
     }
 
+    /**
+     * @param string $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @param string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @param string $nickname
+     */
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
+    }
 }

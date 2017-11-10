@@ -1,0 +1,35 @@
+{% extends '@App/base.html.twig' %}
+
+{% block headerTitle %}
+    Resultat hinzufügen
+{% endblock %}
+
+{% block navigation %}
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="{{ path('homepage') }}">Startseite</a></li>
+    </ul>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <div>
+            <p>
+                {{ message }}
+            </p>
+        </div>
+
+        <form action="" method="get">
+            <div class="row">
+                <div class="input-field col s12">
+                    <select id="rank-type" class="validate" name="rank-type">
+                        <option value="" disabled selected>Wähle eine option</option>
+                        {% for game in games %}
+                            <option value="{{ game.id }}">{{ game.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="rank-type">Ranglisten typ</label>
+                </div>
+            </div>
+        </form>
+        <a href="{{ path('homepage') }}">Zurück</a>
+    </div>
+{% endblock %}
