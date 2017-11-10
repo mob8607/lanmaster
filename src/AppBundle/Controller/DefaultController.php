@@ -9,16 +9,49 @@ use AppBundle\Entity\Player;
 use AppBundle\Entity\RankPoint;
 use AppBundle\Entity\RankType;
 use AppBundle\Entity\Result;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
+
+        return $this->render(
+            '@App/default/index.html.twig',
+            [
+                'events' => $events,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/create-password/{plainPW}", name="create-password")
+     */
+    public function createPasswordAction(UserPasswordEncoderInterface $encoder, $plainPW)
+    {
+        $user = new User();
+        $plainPassword = $plainPW;
+        $encoded = $encoder->encodePassword($user, $plainPassword);
+
+        return new Response(
+            '<html><body><p>' . $encoded . '</p></body></html>'
+        );
+    }
+
+    /**
+     * @Route("/admin", name="admin")
+     */
+    public function adminAction(Request $request)
     {
         $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
 
@@ -115,7 +148,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/add-game/", name="add-game")
+     * @Route("/admin/add-game/", name="add-game")
      */
     public function addGameAction(Request $request)
     {
@@ -155,7 +188,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/add-event/", name="add-event")
+     * @Route("/admin/add-event/", name="add-event")
      */
     public function addEventAction(Request $request)
     {
@@ -185,7 +218,7 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/add-player/", name="add-player")
+     * @Route("/admin/add-player/", name="add-player")
      */
     public function addPlayerAction(Request $request)
     {
@@ -219,7 +252,7 @@ class DefaultController extends Controller
 
 
     /**
-     * @Route("/add-result/{eventId}/{gameId}", name="add-result")
+     * @Route("/admin/add-result/{eventId}/{gameId}", name="add-result")
      */
     public function addResultAction($eventId, $gameId, Request $request)
     {
@@ -292,7 +325,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/select-game/{eventId}", name="select-game")
+     * @Route("/admin/select-game/{eventId}", name="select-game")
      */
     public function selectGameAction($eventId, Request $request)
     {

@@ -20,9 +20,11 @@
                     {% block navigation %}
                         <ul id="nav-mobile" class="right hide-on-med-and-down">
                             <li><a href="{{ path('homepage') }}">Startseite</a></li>
-                            <li><a href="{{ path('add-event') }}">Event hinzufügen</a></li>
-                            <li><a href="{{ path('add-game') }}">Spiel hinzufügen</a></li>
-                            <li><a href="{{ path('add-player') }}">Spieler hinzufügen</a></li>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{ path('add-event') }}">Event hinzufügen</a></li>
+                                <li><a href="{{ path('add-game') }}">Spiel hinzufügen</a></li>
+                                <li><a href="{{ path('add-player') }}">Spieler hinzufügen</a></li>
+                            {% endif %}
                         </ul>
                     {% endblock %}
                 </div>
