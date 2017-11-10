@@ -1,0 +1,28 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div>
+        <table class="striped">
+            <thead>
+            <tr>
+                <th>Gesamtrang</th>
+                <th>Nickname</th>
+                <th>Spiel 1</th>
+                <th>Spiel 2</th>
+                <th>Spiel 3</th>
+                <th>Spiel 4</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.id }}</td>
+                    <td>{{ player.nickname }}({{ player.firstName }} {{ player.lastName }})</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

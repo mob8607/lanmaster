@@ -1,0 +1,25 @@
+{% extends '@App/base.html.twig' %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="container">
+            <div id="welcome">
+                <h1><span>Welcomed to</span> Symfony {{ constant('Symfony\\Component\\HttpKernel\\Kernel::VERSION') }}</h1>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div>
+        <ul>
+            {% for event in events %}
+            <li>{{ event.id }}
+            </li>
+
+            {% endfor %}
+
+
+        </ul>
+    </div>
+{% endblock %}
