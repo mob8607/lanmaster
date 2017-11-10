@@ -73,6 +73,22 @@ class DefaultController extends Controller
             return $a['score'] - $b['score'];
         });
 
+        $beforeScore = 0;
+        $beforePlace = 1;
+        foreach ($playerResults as $key => $playerResult) {
+            $place = $key + 1;
+
+            if ($playerResult['score'] === $beforeScore) {
+                $place = $beforePlace;
+            }
+
+            $playerResults[$key]['place'] = $place;
+
+            $beforeScore = $playerResult['score'];
+            $beforePlace = $place;
+        }
+
+
         return $this->render(
             '@App/default/event.html.twig',
             [
@@ -209,15 +225,16 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $message = '';
+        $match = $this->getDoctrine()->getRepository(Match::class)->findOneBy([
+            'game' => $gameId,
+            'event' => $eventId,
+        ]);
 
         if ($request->getMethod() === 'POST') {
             $playerId = $request->request->get('player');
             $rank = $request->request->get('rank');
+
             $player = $this->getDoctrine()->getRepository(Player::class)->find($playerId);
-            $match = $this->getDoctrine()->getRepository(Match::class)->findOneBy([
-                'game' => $gameId,
-                'event' => $eventId,
-            ]);
 
             if (empty($match)) {
                 $event = $this->getDoctrine()->getRepository(Event::class)->find($eventId);
@@ -228,7 +245,12 @@ class DefaultController extends Controller
                 $em->persist($match);
             }
 
-            if ($player && $rank && $match) {
+            $oldResult = $this->getDoctrine()->getRepository(Result::class)->findOneBy([
+                'match' => $match,
+                'player' => $player,
+            ]);
+
+            if (empty($oldResult) && $player && $rank && $match) {
                 $result = new Result();
                 $result->setRank($rank);
                 $result->setPlayer($player);
@@ -238,11 +260,25 @@ class DefaultController extends Controller
                 $em->flush();
 
                 $message = 'Resultat gespeichert';
+            } else {
+                $message = 'Fehler beim Speichern';
             }
         }
 
         $games = $this->getDoctrine()->getRepository(Game::class)->findAll();
-        $players = $this->getDoctrine()->getRepository(Player::class)->findAll();
+        $allPlayers = $this->getDoctrine()->getRepository(Player::class)->findAll();
+        $players = [];
+
+        foreach($allPlayers as $player) {
+            $result = $this->getDoctrine()->getRepository(Result::class)->findOneBy([
+                'player' => $player,
+                'match' => $match,
+            ]);
+
+            if (empty($result)) {
+                $players[] = $player;
+            }
+        }
 
         return $this->render(
             '@App/default/add-result.html.twig',

@@ -21,9 +21,9 @@
             <div class="row">
                 <div class="input-field col s6">
                     <select id="player" class="validate" name="player">
-                        <option value="" disabled selected>Wähle eine option</option>
+                        <option value="" disabled selected>Wähle eine Option</option>
                         {% for player in players %}
-                            <option value="{{ player.id }}">{{ player.nickname }}</option>
+                            <option value="{{ player.id }}">{{ player.firstName }} {{ player.lastName }}</option>
                         {% endfor %}
                     </select>
                     <label for="player">Name</label>

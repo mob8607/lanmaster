@@ -12,7 +12,7 @@
             <thead>
             <tr>
                 <th>Gesamtrang</th>
-                <th>Nickname</th>
+                <th>Name</th>
                 <th>Gesamtscore</th>
                 {% for key in games|keys %}
                     <th>{{ key }}</th>
@@ -23,8 +23,8 @@
             <tbody>
             {% for result in results %}
                 <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ result.player.nickname }}</td>
+                    <td>{{ result.place }}</td>
+                    <td>{{ result.player.firstName }} {{ result.player.lastName }}</td>
                     <td>{{ result.score }}</td>
                     {% for key in games %}
                         {% set hasResult = false %}
