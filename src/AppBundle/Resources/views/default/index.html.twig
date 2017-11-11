@@ -5,20 +5,22 @@
         <div class="row">
             <div class="col s12">
                 <h2>
-                    Welcome to the Tournament Master 4000
+                    Willkommen zum Lanmeister 2017!
                 </h2>
             </div>
         </div>
 
         <div class="row">
             <div class="col s12">
-                <ul>
+                Wähle einen Event:
+
+                <div class="collection">
                     {% for event in events %}
-                        <li>
-                            <a href="{{ path('event', {'eventId': event.id}) }}">{{ event.name }}</a>
-                        </li>
+                        <a href="{{ path('event', {'eventId': event.id}) }}" class="collection-item">
+                            {{ event.name }}
+                        </a>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -13,18 +13,17 @@
     <div class="container">
         <div class="row">
             <div class="col s12">
-                <ul>
+                <div class="collection">
                     {% for game in games %}
-                        <li>
-                            <a href="{{ path('add-result', {
-                                'eventId': eventId,
-                                'gameId': game.id
-                            }) }}">{{ game.name }}</a>
-                        </li>
+                        <a href="{{ path('add-result', {
+                            'eventId': eventId,
+                            'gameId': game.id
+                        }) }}" class="collection-item">{{ game.name }}</a>
+
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
-        <a href="{{ path('event', {'eventId': eventId}) }}">Zurück</a>
+        <a href="{{ path('event', {'eventId': eventId}) }}" class="waves-effect waves-light btn back-button">Zurück</a>
     </div>
 {% endblock %}
