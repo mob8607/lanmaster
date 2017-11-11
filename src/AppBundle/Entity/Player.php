@@ -24,14 +24,14 @@ class Player
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string")
+     * @ORM\Column(name="firstName", type="string", nullable=true)
      */
     protected $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lastName", type="string")
+     * @ORM\Column(name="lastName", type="string", nullable=true)
      */
     protected $lastName;
 

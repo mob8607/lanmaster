@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
 class DefaultController extends Controller
 {
     /**
@@ -80,10 +79,12 @@ class DefaultController extends Controller
 
             $playerResults[$player->getId()]['player'] = $player;
             /** @var RankPoint $rankPoints */
-            $rankPoints = $this->getDoctrine()->getRepository(RankPoint::class)->findOneBy([
-                'place' => $result->getRank(),
-                'rankType' => $game->getRankType(),
-            ]);
+            $rankPoints = $this->getDoctrine()->getRepository(RankPoint::class)->findOneBy(
+                [
+                    'place' => $result->getRank(),
+                    'rankType' => $game->getRankType(),
+                ]
+            );
 
             $points = 0;
             if ($rankPoints) {
@@ -102,9 +103,12 @@ class DefaultController extends Controller
             $playerResults[$player->getId()]['score'] = $currentScore + $points;
         }
 
-        usort($playerResults, function($b, $a) {
-            return $a['score'] - $b['score'];
-        });
+        usort(
+            $playerResults,
+            function ($b, $a) {
+                return $a['score'] - $b['score'];
+            }
+        );
 
         $beforeScore = 0;
         $beforePlace = 1;
@@ -120,7 +124,6 @@ class DefaultController extends Controller
             $beforeScore = $playerResult['score'];
             $beforePlace = $place;
         }
-
 
         return $this->render(
             '@App/default/event.html.twig',
@@ -175,7 +178,6 @@ class DefaultController extends Controller
             }
         }
 
-
         $rankTypes = $this->getDoctrine()->getRepository(RankType::class)->findAll();
 
         return $this->render(
@@ -216,7 +218,6 @@ class DefaultController extends Controller
         );
     }
 
-
     /**
      * @Route("/admin/add-player/", name="add-player")
      */
@@ -230,10 +231,14 @@ class DefaultController extends Controller
             $lastName = $request->request->get('last-name');
             $nickname = $request->request->get('nickname');
 
-            if ($firstName && $lastName && $nickname) {
+            if ($nickname) {
                 $player = new Player();
-                $player->setFirstName($firstName);
-                $player->setLastName($lastName);
+                if ($firstName) {
+                    $player->setFirstName($firstName);
+                }
+                if ($lastName) {
+                    $player->setLastName($lastName);
+                }
                 $player->setNickname($nickname);
                 $em->persist($player);
                 $em->flush();
@@ -250,7 +255,6 @@ class DefaultController extends Controller
         );
     }
 
-
     /**
      * @Route("/admin/add-result/{eventId}/{gameId}", name="add-result")
      */
@@ -258,10 +262,12 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $message = '';
-        $match = $this->getDoctrine()->getRepository(Match::class)->findOneBy([
-            'game' => $gameId,
-            'event' => $eventId,
-        ]);
+        $match = $this->getDoctrine()->getRepository(Match::class)->findOneBy(
+            [
+                'game' => $gameId,
+                'event' => $eventId,
+            ]
+        );
 
         if ($request->getMethod() === 'POST') {
             $playerId = $request->request->get('player');
@@ -278,10 +284,12 @@ class DefaultController extends Controller
                 $em->persist($match);
             }
 
-            $oldResult = $this->getDoctrine()->getRepository(Result::class)->findOneBy([
-                'match' => $match,
-                'player' => $player,
-            ]);
+            $oldResult = $this->getDoctrine()->getRepository(Result::class)->findOneBy(
+                [
+                    'match' => $match,
+                    'player' => $player,
+                ]
+            );
 
             if (empty($oldResult) && $player && $rank && $match) {
                 $result = new Result();
@@ -302,11 +310,13 @@ class DefaultController extends Controller
         $allPlayers = $this->getDoctrine()->getRepository(Player::class)->findAll();
         $players = [];
 
-        foreach($allPlayers as $player) {
-            $result = $this->getDoctrine()->getRepository(Result::class)->findOneBy([
-                'player' => $player,
-                'match' => $match,
-            ]);
+        foreach ($allPlayers as $player) {
+            $result = $this->getDoctrine()->getRepository(Result::class)->findOneBy(
+                [
+                    'player' => $player,
+                    'match' => $match,
+                ]
+            );
 
             if (empty($result)) {
                 $players[] = $player;
