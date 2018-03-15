@@ -9,6 +9,7 @@ use AppBundle\Entity\Player;
 use AppBundle\Entity\RankPoint;
 use AppBundle\Entity\RankType;
 use AppBundle\Entity\Result;
+use AppBundle\Entity\Settings;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -24,11 +25,13 @@ class DefaultController extends Controller
     public function indexAction(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $events = $this->getDoctrine()->getRepository(Event::class)->findAll();
+        $settings = $this->getDoctrine()->getRepository(Settings::class)->find(1);
 
         return $this->render(
             '@App/default/index.html.twig',
             [
                 'events' => $events,
+                'settings' => $settings,
             ]
         );
     }
@@ -87,13 +90,16 @@ class DefaultController extends Controller
             );
 
             $points = 0;
+            $description = '';
             if ($rankPoints) {
                 $points = $rankPoints->getPoints();
+                $description = $rankPoints->getDescription();
             }
 
             $playerResults[$player->getId()]['results'][$game->getId()] = [
                 'rank' => $result->getRank(),
                 'points' => $points,
+                'description' => $description,
             ];
 
             $currentScore = 0;

@@ -34,7 +34,12 @@
                         {% for gameId, gameResult in result.results %}
                             {% if key == gameId %}
                                 {% set hasResult = true %}
-                                <td>{{ gameResult.points }} ({{ gameResult.rank }})</td>
+                                {% set rank = gameResult.rank %}
+                                {% if gameResult.description %}
+                                    {% set rank = gameResult.description %}
+                                {% endif %}
+
+                                <td>{{ gameResult.points }} ({{ rank }})</td>
                             {% endif %}
                         {% endfor %}
                         {% if hasResult == false %}

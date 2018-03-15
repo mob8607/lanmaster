@@ -28,6 +28,14 @@ class RankPoint
      */
     protected $place;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", nullable=true)
+     */
+    protected $description;
+
     /**
      * @return mixed
      */
@@ -99,4 +107,21 @@ class RankPoint
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
 }
