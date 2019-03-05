@@ -139,11 +139,29 @@ class DefaultController extends Controller
             $participants[] = $player->getNickname();
         }
 
+        $allGames = $this->getDoctrine()->getRepository(Game::class)->findAll();
+        $eventGames = [];
+
+        foreach ($allGames as $game) {
+            $isEventGame = false;
+            $gameEvents = $game->getEvents();
+            foreach ($gameEvents as $gameEvent) {
+                if ($gameEvent->getId() === intval($eventId)) {
+                    $isEventGame = true;
+                }
+            }
+
+            if ($isEventGame) {
+                $eventGames[] = $game;
+            }
+        }
+
         return $this->render(
             '@App/default/event.html.twig',
             [
                 'results' => $playerResults,
                 'games' => $games,
+                'eventGames' => $eventGames,
                 'eventId' => $eventId,
                 'participants' => $participants,
             ]
@@ -236,12 +254,16 @@ class DefaultController extends Controller
      */
     public function gameAction($gameId)
     {
-        $players = $this->getDoctrine()->getRepository(Player::class)->findAll();
+        /** @var Game $game */
+        $game = $this->getDoctrine()->getRepository(Game::class)->find($gameId);
+
+        $rankType = $game->getRankType();
+        $rankPoints = $this->getDoctrine()->getRepository(Rankpoint::class)->findBy(['rankType' => $rankType]);
 
         return $this->render(
             '@App/default/game.html.twig',
             [
-                'players' => $players,
+                'rankPoints' => $rankPoints,
             ]
         );
     }

@@ -2,23 +2,20 @@
 
 {% block body %}
     <div>
+        <a href="{{ path('homepage') }}" class="waves-effect waves-light btn back-button">Zurück zur Startseite</a>
         <table class="striped">
             <thead>
             <tr>
-                <th>Gesamtrang</th>
-                <th>Nickname</th>
-                <th>Spiel 1</th>
-                <th>Spiel 2</th>
-                <th>Spiel 3</th>
-                <th>Spiel 4</th>
+                <th>Rank</th>
+                <th>Punkte</th>
             </tr>
             </thead>
 
             <tbody>
-            {% for player in players %}
+            {% for rankPoint in rankPoints %}
                 <tr>
-                    <td>{{ player.id }}</td>
-                    <td>{{ player.nickname }}({{ player.firstName }} {{ player.lastName }})</td>
+                    <td>{{ rankPoint.place }}</td>
+                    <td>{{ rankPoint.points }}</td>
                 </tr>
             {% endfor %}
 

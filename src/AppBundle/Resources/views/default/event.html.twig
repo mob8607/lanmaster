@@ -55,16 +55,28 @@
     </table>
     <br>
     <a href="{{ path('homepage') }}" class="waves-effect waves-light btn back-button">Zurück</a>
+
+    <div style="margin: 20px;">
+      <h4>Gespielte Spiele:</h4>
+      <div class="collection">
+        {% for game in eventGames %}
+          <a href="{{ path('game', {'gameId': game.id}) }}" class="collection-item">
+            {{ game.name }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+
     {#To show all participants:#}
     {#<div style="margin: 20px;">#}
-      {#<h4>Teilnehmer</h4>#}
-      {#<table>#}
-        {#{% for participant in participants %}#}
-          {#<tr>#}
-            {#<td>{{ participant }}</td>#}
-          {#</tr>#}
-        {#{% endfor %}#}
-      {#</table>#}
+    {#<h4>Teilnehmer</h4>#}
+    {#<table>#}
+    {#{% for participant in participants %}#}
+    {#<tr>#}
+    {#<td>{{ participant }}</td>#}
+    {#</tr>#}
+    {#{% endfor %}#}
+    {#</table>#}
     {#</div>#}
   </div>
 
