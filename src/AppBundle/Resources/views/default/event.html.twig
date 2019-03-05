@@ -1,60 +1,71 @@
 {% extends '@App/base.html.twig' %}
 
 {% block navigation %}
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="{{ path('homepage') }}">Startseite</a></li>
-        {% if is_granted('ROLE_ADMIN') %}
-            <li><a href="{{ path('select-game', {'eventId': eventId}) }}">Resultat hinzufügen</a></li>
-        {% endif %}
-    </ul>
+  <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <li><a href="{{ path('homepage') }}">Startseite</a></li>
+    {% if is_granted('ROLE_ADMIN') %}
+      <li><a href="{{ path('select-game', {'eventId': eventId}) }}">Resultat hinzufügen</a></li>
+      <li><a href="{{ path('edit-event', {'eventId': eventId}) }}">Event bearbeiten</a></li>
+    {% endif %}
+  </ul>
 {% endblock %}
 {% block body %}
-    <div>
-        <br>
-        <table class="striped">
-            <thead>
-            <tr>
-                <th>Gesamtrang</th>
-                <th>Name</th>
-                <th>Gesamtscore</th>
-                {% for key in games|keys %}
-                    <th>{{ key }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
+  <div>
+    <br>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Gesamtrang</th>
+          <th>Name</th>
+          <th>Gesamtscore</th>
+          {% for key in games|keys %}
+            <th>{{ key }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
 
-            <tbody>
-            {% for result in results %}
-                <tr>
-                    <td>{{ result.place }}</td>
-                    <td>{{ result.player.firstName }} "{{ result.player.nickname }}" {{ result.player.lastName }}</td>
-                    <td>{{ result.score }}</td>
-                    {% for key in games %}
-                        {% set hasResult = false %}
-                        {% for gameId, gameResult in result.results %}
-                            {% if key == gameId %}
-                                {% set hasResult = true %}
-                                {% set rank = gameResult.rank %}
-                                {% if gameResult.description %}
-                                    {% set rank = gameResult.description %}
-                                {% endif %}
+      <tbody>
+        {% for result in results %}
+          <tr>
+            <td>{{ result.place }}</td>
+            <td>{{ result.player.firstName }} "{{ result.player.nickname }}" {{ result.player.lastName }}</td>
+            <td>{{ result.score }}</td>
+            {% for key in games %}
+              {% set hasResult = false %}
+              {% for gameId, gameResult in result.results %}
+                {% if key == gameId %}
+                  {% set hasResult = true %}
+                  {% set rank = gameResult.rank %}
+                  {% if gameResult.description %}
+                    {% set rank = gameResult.description %}
+                  {% endif %}
 
-                                <td>{{ gameResult.points }} ({{ rank }})</td>
-                            {% endif %}
-                        {% endfor %}
-                        {% if hasResult == false %}
-                            <td></td>
-                        {% endif %}
-                    {% endfor %}
-
-
-                </tr>
+                  <td>{{ gameResult.points }} ({{ rank }})</td>
+                {% endif %}
+              {% endfor %}
+              {% if hasResult == false %}
+                <td></td>
+              {% endif %}
             {% endfor %}
 
-            </tbody>
-        </table>
-        <br>
-    </div>
+          </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+    <br>
     <a href="{{ path('homepage') }}" class="waves-effect waves-light btn back-button">Zurück</a>
+    {#To show all participants:#}
+    {#<div style="margin: 20px;">#}
+      {#<h4>Teilnehmer</h4>#}
+      {#<table>#}
+        {#{% for participant in participants %}#}
+          {#<tr>#}
+            {#<td>{{ participant }}</td>#}
+          {#</tr>#}
+        {#{% endfor %}#}
+      {#</table>#}
+    {#</div>#}
+  </div>
 
 {% endblock %}

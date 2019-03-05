@@ -70,6 +70,8 @@ class DefaultController extends Controller
      */
     public function eventAction($eventId)
     {
+        /** @var Event $event */
+        $event = $this->getDoctrine()->getRepository(Event::class)->find($eventId);
         $results = $this->getDoctrine()->getRepository(Result::class)->findAllByEvent($eventId);
 
         $playerResults = [];
@@ -131,12 +133,75 @@ class DefaultController extends Controller
             $beforePlace = $place;
         }
 
+        $participants = [];
+        /** @var Player $player */
+        foreach ($event->getPlayers() as $player) {
+            $participants[] = $player->getNickname();
+        }
+
         return $this->render(
             '@App/default/event.html.twig',
             [
                 'results' => $playerResults,
                 'games' => $games,
                 'eventId' => $eventId,
+                'participants' => $participants,
+            ]
+        );
+    }
+
+
+    /**
+     * @Route("/admin/edit-event/{eventId}", name="edit-event")
+     */
+    public function editEventAction($eventId, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = $this->getDoctrine()->getRepository(Event::class)->find($eventId);
+
+        if ($request->getMethod() == 'POST') {
+            $playerId = $request->request->get('player');
+            $name = $request->request->get('name');
+
+            if ($playerId) {
+                $player = $this->getDoctrine()->getRepository(Player::class)->find($playerId);
+                $player->addEvent($event);
+            }
+
+            $event->setName($name);
+
+            $em->flush();
+        }
+
+        $participants = [];
+        /** @var Player $player */
+        foreach ($event->getPlayers() as $player) {
+            $participants[] = $player->getNickname();
+        }
+
+        $allPlayers = $this->getDoctrine()->getRepository(Player::class)->findAll();
+        $players = [];
+
+        foreach ($allPlayers as $player) {
+            $alreadyAdded = false;
+            $playerEvents = $player->getEvents();
+            foreach ($playerEvents as $playerEvent) {
+                if ($playerEvent->getId() === intval($eventId)) {
+                    $alreadyAdded = true;
+                }
+            }
+
+            if (!$alreadyAdded) {
+                $players[] = $player;
+            }
+        }
+
+        return $this->render(
+            '@App/default/edit-event.html.twig',
+            [
+                'event' => $event,
+                'players' => $players,
+                'participants' => $participants,
             ]
         );
     }
@@ -324,7 +389,15 @@ class DefaultController extends Controller
                 ]
             );
 
-            if (empty($result)) {
+            $isEventPlayer = false;
+            $playerEvents = $player->getEvents();
+            foreach ($playerEvents as $playerEvent) {
+                if ($playerEvent->getId() === intval($eventId)) {
+                    $isEventPlayer = true;
+                }
+            }
+
+            if (empty($result) && $isEventPlayer) {
                 $players[] = $player;
             }
         }

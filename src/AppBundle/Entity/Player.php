@@ -42,6 +42,18 @@ class Player
      */
     protected $nickname;
 
+    /**
+     * @var integer
+     *
+     * Many Users have Many Groups.
+     * @ORM\ManyToMany(targetEntity="Event", inversedBy="players")
+     * @ORM\JoinTable(name="event_players")
+     */
+    protected $events;
+
+    public function __construct() {
+        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -78,6 +90,14 @@ class Player
     }
 
     /**
+     * @return array
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
      * @param string $firstName
      */
     public function setFirstName($firstName)
@@ -99,5 +119,21 @@ class Player
     public function setNickname($nickname)
     {
         $this->nickname = $nickname;
+    }
+
+    /**
+     * @param array
+     */
+    public function setEvents($events)
+    {
+        $this->events = $events;
+    }
+
+    /**
+     * @param Event
+     */
+    public function addEvent($event)
+    {
+        $this->events[] = $event;
     }
 }

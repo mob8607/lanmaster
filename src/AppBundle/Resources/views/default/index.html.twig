@@ -5,7 +5,9 @@
         <div class="row">
             <div class="col s12">
                 <h2>
-                    {{ settings.title }}
+                    {% if settings is defined and settings is not null %}
+                        {{ settings.title }}
+                    {% endif %}
                 </h2>
             </div>
         </div>

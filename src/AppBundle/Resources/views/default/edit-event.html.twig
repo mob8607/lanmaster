@@ -1,0 +1,42 @@
+{% extends '@App/base.html.twig' %}
+
+{% block headerTitle %}
+    Event hinzufügen
+{% endblock %}
+
+{% block navigation %}
+<ul id="nav-mobile" class="right hide-on-med-and-down">
+    <li><a href="{{ path('homepage') }}">Startseite</a></li>
+</ul>
+{% endblock %}
+{% block body %}
+  <div class="container">
+    <form method="post">
+      <br>
+      <div class="row">
+        <div class="input-field col s6">
+          <select id="player" class="validate" name="player">
+            <option value="" disabled selected>Spieler zu Event hinzufügen</option>
+            {% for player in players %}
+              <option value="{{ player.id }}">{{ player.nickname }}</option>
+            {% endfor %}
+          </select>
+          <label for="player">Spieler</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <label for="event-name">Name</label>
+          <input id="event-name" type="text" class="validate" name="name" value="{{ event.getName() }}"/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <button class="btn waves-effect waves-light" type="submit" name="action">Absenden
+          </button>
+        </div>
+      </div>
+    </form>
+    <a href="{{ path('event', {'eventId': event.getId() }) }}" class="waves-effect waves-light btn">Zurück</a>
+  </div>
+{% endblock %}
