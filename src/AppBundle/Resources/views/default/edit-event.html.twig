@@ -25,6 +25,17 @@
         </div>
       </div>
       <div class="row">
+        <div class="input-field col s6">
+          <select id="game" class="validate" name="game">
+            <option value="" disabled selected>Spiel zu Event hinzufügen</option>
+            {% for game in games %}
+              <option value="{{ game.id }}">{{ game.getName() }}</option>
+            {% endfor %}
+          </select>
+          <label for="game">Spiel</label>
+        </div>
+      </div>
+      <div class="row">
         <div class="input-field col s12">
           <label for="event-name">Name</label>
           <input id="event-name" type="text" class="validate" name="name" value="{{ event.getName() }}"/>

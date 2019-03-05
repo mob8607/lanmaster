@@ -161,11 +161,17 @@ class DefaultController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $playerId = $request->request->get('player');
+            $gameId = $request->request->get('game');
             $name = $request->request->get('name');
 
             if ($playerId) {
                 $player = $this->getDoctrine()->getRepository(Player::class)->find($playerId);
                 $player->addEvent($event);
+            }
+
+            if ($gameId) {
+                $game = $this->getDoctrine()->getRepository(Game::class)->find($gameId);
+                $game->addEvent($event);
             }
 
             $event->setName($name);
@@ -196,11 +202,30 @@ class DefaultController extends Controller
             }
         }
 
+        $allGames = $this->getDoctrine()->getRepository(Game::class)->findAll();
+        $games = [];
+
+        foreach ($allGames as $game) {
+            $alreadyAdded = false;
+            $gameEvents = $game->getEvents();
+
+            foreach ($gameEvents as $gameEvent) {
+                if ($gameEvent->getId() === intval($eventId)) {
+                    $alreadyAdded = true;
+                }
+            }
+
+            if (!$alreadyAdded) {
+                $games[] = $game;
+            }
+        }
+
         return $this->render(
             '@App/default/edit-event.html.twig',
             [
                 'event' => $event,
                 'players' => $players,
+                'games' => $games,
                 'participants' => $participants,
             ]
         );
@@ -418,7 +443,22 @@ class DefaultController extends Controller
      */
     public function selectGameAction($eventId, Request $request)
     {
-        $games = $this->getDoctrine()->getRepository(Game::class)->findAll();
+        $allGames = $this->getDoctrine()->getRepository(Game::class)->findAll();
+        $games = [];
+
+        foreach ($allGames as $game) {
+            $isEventGame = false;
+            $gameEvents = $game->getEvents();
+            foreach ($gameEvents as $gameEvent) {
+                if ($gameEvent->getId() === intval($eventId)) {
+                    $isEventGame = true;
+                }
+            }
+
+            if ($isEventGame) {
+                $games[] = $game;
+            }
+        }
 
         return $this->render(
             '@App/default/select-game.html.twig',

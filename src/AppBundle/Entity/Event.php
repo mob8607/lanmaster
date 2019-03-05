@@ -29,13 +29,21 @@ class Event
     protected $name;
 
     /**
-     * Many Groups have Many Users.
+     * Many Events have Many Players.
      * @ORM\ManyToMany(targetEntity="Player", mappedBy="events")
      */
     protected $players;
 
+
+    /**
+     * Many Events have Many Games.
+     * @ORM\ManyToMany(targetEntity="Game", mappedBy="events")
+     */
+    protected $games;
+
     public function __construct() {
         $this->players = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->games = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -65,6 +73,14 @@ class Event
     }
 
     /**
+     * @return array
+     */
+    public function getGames()
+    {
+        return $this->games;
+    }
+
+    /**
      * @param string $name
      */
     public function setName($name)
@@ -83,8 +99,16 @@ class Event
     /**
      * @param Player
      */
-    public function addPlayer($players)
+    public function addPlayer($player)
     {
-        $this->players[] = $players;
+        $this->players[] = $player;
+    }
+
+    /**
+     * @param Game
+     */
+    public function addGame($game)
+    {
+        $this->games[] = $game;
     }
 }

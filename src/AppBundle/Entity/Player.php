@@ -45,7 +45,7 @@ class Player
     /**
      * @var integer
      *
-     * Many Users have Many Groups.
+     * Many Players have Many Events.
      * @ORM\ManyToMany(targetEntity="Event", inversedBy="players")
      * @ORM\JoinTable(name="event_players")
      */

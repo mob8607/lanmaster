@@ -42,6 +42,15 @@ class Game
     protected $rankType;
 
     /**
+     * @var integer
+     *
+     * Many Games have Many Events.
+     * @ORM\ManyToMany(targetEntity="Event", inversedBy="games")
+     * @ORM\JoinTable(name="event_games")
+     */
+    protected $events;
+
+    /**
      * @return mixed
      */
     public function getRankType()
@@ -97,5 +106,21 @@ class Game
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * @param Event
+     */
+    public function addEvent($event)
+    {
+        $this->events[] = $event;
     }
 }
